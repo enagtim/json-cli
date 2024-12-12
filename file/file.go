@@ -2,21 +2,19 @@ package file
 
 import (
 	"errors"
-	"os"
 	"path/filepath"
 	"strings"
 )
 
-func ReadFile(url string) ([]byte, error) {
-	data, err := os.ReadFile(url)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
+type FileHandler interface {
+	IsJson(filePath string) (bool, error)
 }
-func IsJson(filePath string) (bool, error) {
+
+type DefaultFileHandler struct{}
+
+func (d *DefaultFileHandler) IsJson(filePath string) (bool, error) {
 	if filePath == "" {
-		return false, errors.New("file is empty")
+		return false, errors.New("FILE PATH IS EMPTY")
 	}
 	return strings.ToLower(filepath.Ext(filePath)) == ".json", nil
 }
